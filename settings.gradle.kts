@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MoodInTunes"
 include(":app")
+include(":feature-discover")
+include(":data")
+include(":domain")
