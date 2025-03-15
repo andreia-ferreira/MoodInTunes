@@ -1,4 +1,4 @@
-package net.penguin.moodintunes.ui.theme
+package net.penguin.common_design.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

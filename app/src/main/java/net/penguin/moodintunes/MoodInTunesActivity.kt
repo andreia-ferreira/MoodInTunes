@@ -7,13 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import net.penguin.feature_discover.DiscoverScreen
-import net.penguin.moodintunes.ui.theme.MoodInTunesTheme
+import net.penguin.common_design.theme.MoodInTunesTheme
+import net.penguin.feature_discover.ui.DiscoverScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

@@ -1,6 +1,5 @@
-package net.penguin.moodintunes.ui.theme
+package net.penguin.common_design.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

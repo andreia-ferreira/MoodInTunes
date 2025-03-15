@@ -1,4 +1,4 @@
-package net.penguin.moodintunes.ui.theme
+package net.penguin.common_design.theme
 
 import androidx.compose.ui.graphics.Color
 

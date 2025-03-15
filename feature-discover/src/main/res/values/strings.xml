@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discover_header">Hi there! How are you feeling today?</string>
+    <string name="discover_generic_error">An error has occurred. Please try again later</string>
+    <string name="playlist_number_of_tracks">%d tracks</string>
+    <string name="mood_chill">Chill</string>
+    <string name="mood_happy">Happy</string>
+    <string name="mood_party">Party</string>
+    <string name="mood_fun">Fun</string>
+    <string name="mood_workout">Workout</string>
+    <string name="mood_focused">Focused</string>
+    <string name="mood_epic">Epic</string>
+    <string name="mood_romantic">Romantic</string>
+    <string name="mood_dreamy">Dreamy</string>
+    <string name="mood_nostalgic">Nostalgic</string>
+    <string name="mood_sad">Sad</string>
+    <string name="mood_angry">Angry</string>
+    <string name="mood_road_trip">Road trip</string>
+</resources>

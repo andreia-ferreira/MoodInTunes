@@ -16,8 +16,8 @@ data class PlaylistSearchResult(
         val id: Long,
         @SerializedName("nb_tracks")
         val nbTracks: Int,
-        @SerializedName("picture_small")
-        val pictureSmall: String,
+        @SerializedName("picture_medium")
+        val pictureMedium: String,
         @SerializedName("title")
         val title: String,
     )

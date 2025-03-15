@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common-design"))
     implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
@@ -59,4 +60,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.google.dagger.hilt)
     ksp(libs.google.dagger.hilt.compiler)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
