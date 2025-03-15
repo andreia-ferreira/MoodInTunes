@@ -8,17 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,33 +27,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MoodInTunesTheme {
-                val navController = rememberNavController()
-                var showBackArrow by rememberSaveable { mutableStateOf(false) }
-
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        if (showBackArrow) {
-                            CenterAlignedTopAppBar(
-                                title = {},
-                                navigationIcon = {
-                                    IconButton(onClick = { navController.popBackStack() }) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                            contentDescription = "Localized description"
-                                        )
-                                    }
-                                },
-                            )
-                        }
-                    },
                 ) { innerPadding ->
+                    val navController = rememberNavController()
                     NavHost(
                         navController = navController,
                         startDestination = NavigationItem.Discover
                     ) {
                         composable<NavigationItem.Discover> {
-                            showBackArrow = false
                             DiscoverScreen(
                                 modifier = Modifier.padding(innerPadding),
                                 goToPlaylistDetails = {
@@ -71,8 +44,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<NavigationItem.PlaylistDetail> {
-                            showBackArrow = true
-                            PlaylistScreen(modifier = Modifier.padding(innerPadding))
+                            PlaylistScreen(
+                                onBackClicked = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
                     }
                 }

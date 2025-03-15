@@ -10,12 +10,22 @@ import net.penguin.feature_discover.PlaylistViewModel
 @Composable
 fun PlaylistScreen(
     modifier: Modifier = Modifier,
-    viewModel: PlaylistViewModel = hiltViewModel()
+    viewModel: PlaylistViewModel = hiltViewModel(),
+    onBackClicked: () -> Unit
 ) {
     val state by viewModel.playlistScreenState.collectAsStateWithLifecycle()
 
     PlaylistScreenContent(
         modifier = modifier,
-        state = state
+        state = state,
+        onAction = {
+            when (it) {
+                PlaylistScreenAction.OnBackClicked -> onBackClicked()
+            }
+        }
     )
+}
+
+sealed interface PlaylistScreenAction {
+    data object OnBackClicked: PlaylistScreenAction
 }

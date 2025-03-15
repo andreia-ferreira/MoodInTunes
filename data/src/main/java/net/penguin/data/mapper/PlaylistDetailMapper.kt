@@ -15,7 +15,12 @@ object PlaylistDetailMapper {
             picture = source.pictureBig,
             creator = source.creator.name,
             songList = source.tracks.data.map {
-                Song(id = it.id, title = it.title, artist = it.artist.name)
+                Song(
+                    id = it.id,
+                    title = it.title,
+                    artist = it.artist.name,
+                    previewUrl = it.preview
+                )
             }
         )
 
