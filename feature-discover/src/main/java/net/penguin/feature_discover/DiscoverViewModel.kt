@@ -16,19 +16,31 @@ import javax.inject.Inject
 class DiscoverViewModel @Inject constructor(
     private val searchByMoodUseCase: SearchByMoodUseCase
 ): ViewModel() {
+    private val fullMoodList = Mood.entries.map { MoodMapper.map(it) }
     private val _discoverScreenState: MutableStateFlow<DiscoverScreenState> = MutableStateFlow(
         DiscoverScreenState(
             isLoading = false,
-            moodList = Mood.entries.map { MoodMapper.map(it) },
+            moodList = fullMoodList,
             selectedMood = null,
             searchState = DiscoverScreenState.SearchState.Idle
         )
     )
     val discoverScreenState: StateFlow<DiscoverScreenState> = _discoverScreenState
 
-    fun onMoodSelected(mood: Mood, query: String) {
-        _discoverScreenState.value = _discoverScreenState.value.copy(selectedMood = mood)
+    fun onMoodSelected(mood: DiscoverScreenState.MoodItem, query: String) {
+        _discoverScreenState.value = _discoverScreenState.value.copy(
+            selectedMood = mood,
+            moodList = listOf(mood)
+        )
         searchByMood(query)
+    }
+
+    fun onMoodUnselected() {
+        _discoverScreenState.value = _discoverScreenState.value.copy(
+            selectedMood = null,
+            moodList = fullMoodList,
+            searchState = DiscoverScreenState.SearchState.Idle
+        )
     }
 
     private fun searchByMood(query: String) {

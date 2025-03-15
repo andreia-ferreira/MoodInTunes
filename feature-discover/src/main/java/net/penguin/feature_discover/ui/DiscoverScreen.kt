@@ -5,9 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import net.penguin.domain.entity.Mood
 import net.penguin.domain.entity.Playlist
 import net.penguin.feature_discover.DiscoverViewModel
+import net.penguin.feature_discover.model.DiscoverScreenState
 
 @Composable
 fun DiscoverScreen(
@@ -22,6 +22,7 @@ fun DiscoverScreen(
         onAction = {
             when (it) {
                 is DiscoverScreenAction.OnMoodSelected -> viewModel.onMoodSelected(it.mood, it.name)
+                is DiscoverScreenAction.OnMoodUnselected -> viewModel.onMoodUnselected()
                 is DiscoverScreenAction.OnSearchResultClicked -> TODO()
             }
         }
@@ -29,6 +30,7 @@ fun DiscoverScreen(
 }
 
 sealed interface DiscoverScreenAction {
-    data class OnMoodSelected(val mood: Mood, val name: String): DiscoverScreenAction
+    data class OnMoodSelected(val mood: DiscoverScreenState.MoodItem, val name: String): DiscoverScreenAction
+    data object OnMoodUnselected: DiscoverScreenAction
     data class OnSearchResultClicked(val playlist: Playlist): DiscoverScreenAction
 }

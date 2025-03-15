@@ -7,7 +7,7 @@ import net.penguin.domain.entity.Playlist
 data class DiscoverScreenState(
     val isLoading: Boolean,
     val moodList: List<MoodItem>,
-    val selectedMood: Mood?,
+    val selectedMood: MoodItem?,
     val searchState: SearchState
 ) {
     data class MoodItem(
