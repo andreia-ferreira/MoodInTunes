@@ -1,9 +1,12 @@
 package net.penguin.data
 
+import net.penguin.data.mapper.PlaylistDetailMapper
 import net.penguin.data.mapper.PlaylistMapper
 import net.penguin.data.remote.DeezerApiService
 import net.penguin.domain.entity.Playlist
+import net.penguin.domain.entity.PlaylistDetail
 import net.penguin.domain.repository.SearchRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
@@ -14,6 +17,17 @@ class SearchRepositoryImpl @Inject constructor(
             val result = deezerApiService.searchPlaylist(query)
             Result.success(PlaylistMapper.map(result.body()!!))
         } catch (e: Exception) {
+            Timber.e(e)
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getPlaylistDetails(playlistId: Long): Result<PlaylistDetail> {
+        return try {
+            val result = deezerApiService.getPlaylistDetails(playlistId)
+            Result.success(PlaylistDetailMapper.map(result.body()!!))
+        } catch (e: Exception) {
+            Timber.e(e)
             Result.failure(e)
         }
     }

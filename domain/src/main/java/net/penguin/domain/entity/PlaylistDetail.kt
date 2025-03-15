@@ -5,7 +5,7 @@ data class PlaylistDetail(
     val name: String,
     val description: String,
     val trackNumber: Int,
-    val duration: Int,
+    val duration: Long,
     val picture: String,
     val creator: String,
     val songList: List<Song>

@@ -46,7 +46,7 @@ class DiscoverViewModel @Inject constructor(
     private fun searchByMood(query: String) {
         _discoverScreenState.value = _discoverScreenState.value.copy(isLoading = true)
         viewModelScope.launch {
-            searchByMoodUseCase.execute(SearchByMoodUseCase.RequestParameters(query))
+            searchByMoodUseCase.execute(SearchByMoodUseCase.RequestParams(query))
                 .onSuccess {
                     _discoverScreenState.value = _discoverScreenState.value.copy(
                         isLoading = false,

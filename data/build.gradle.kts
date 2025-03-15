@@ -42,4 +42,6 @@ dependencies {
 
     implementation(libs.google.dagger.hilt)
     ksp(libs.google.dagger.hilt.compiler)
+
+    implementation(libs.timber)
 }

@@ -12,7 +12,8 @@ import net.penguin.feature_discover.model.DiscoverScreenState
 @Composable
 fun DiscoverScreen(
     modifier: Modifier = Modifier,
-    viewModel: DiscoverViewModel = hiltViewModel()
+    viewModel: DiscoverViewModel = hiltViewModel(),
+    goToPlaylistDetails: (Long) -> Unit
 ) {
     val screenState by viewModel.discoverScreenState.collectAsStateWithLifecycle()
 
@@ -23,7 +24,7 @@ fun DiscoverScreen(
             when (it) {
                 is DiscoverScreenAction.OnMoodSelected -> viewModel.onMoodSelected(it.mood, it.name)
                 is DiscoverScreenAction.OnMoodUnselected -> viewModel.onMoodUnselected()
-                is DiscoverScreenAction.OnSearchResultClicked -> TODO()
+                is DiscoverScreenAction.OnSearchResultClicked -> goToPlaylistDetails(it.playlist.id)
             }
         }
     )

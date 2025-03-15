@@ -7,10 +7,10 @@ import javax.inject.Inject
 
 class SearchByMoodUseCase @Inject constructor(
     private val searchRepository: SearchRepository
-): ParamsUseCase<SearchByMoodUseCase.RequestParameters, Result<List<Playlist>>> {
-    override suspend fun execute(requestParams: RequestParameters): Result<List<Playlist>> {
+): ParamsUseCase<SearchByMoodUseCase.RequestParams, Result<List<Playlist>>> {
+    override suspend fun execute(requestParams: RequestParams): Result<List<Playlist>> {
         return searchRepository.searchPlaylists(query = requestParams.query)
     }
 
-    class RequestParameters(val query: String)
+    class RequestParams(val query: String)
 }

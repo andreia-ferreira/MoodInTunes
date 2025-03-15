@@ -1,0 +1,21 @@
+package net.penguin.feature_discover.ui
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.penguin.feature_discover.PlaylistViewModel
+
+@Composable
+fun PlaylistScreen(
+    modifier: Modifier = Modifier,
+    viewModel: PlaylistViewModel = hiltViewModel()
+) {
+    val state by viewModel.playlistScreenState.collectAsStateWithLifecycle()
+
+    PlaylistScreenContent(
+        modifier = modifier,
+        state = state
+    )
+}

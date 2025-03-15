@@ -13,7 +13,7 @@ data class PlaylistDetailResult(
     @SerializedName("description")
     val description: String,
     @SerializedName("duration")
-    val duration: Int,
+    val duration: Long,
     @SerializedName("nb_tracks")
     val nbTracks: Int,
     @SerializedName("picture_big")
