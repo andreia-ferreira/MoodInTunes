@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="playlist_image_size">100dp</dimen>
+    <dimen name="sound_track_height">100dp</dimen>
+    <dimen name="playlist_detail_header_height">200dp</dimen>
     <dimen name="mood_item_min_width">120dp</dimen>
 </resources>

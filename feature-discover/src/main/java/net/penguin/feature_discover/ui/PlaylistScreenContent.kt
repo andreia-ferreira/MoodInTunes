@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +42,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,12 +53,14 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import net.penguin.common_design.DevicePreviews
+import net.penguin.common_design.theme.ContentMaxWidth
 import net.penguin.common_design.theme.CornerRadiusDefault
 import net.penguin.common_design.theme.MoodInTunesTheme
 import net.penguin.common_design.theme.PaddingDefault
 import net.penguin.common_design.theme.PaddingSmall
 import net.penguin.domain.entity.PlaylistDetail
 import net.penguin.domain.entity.Song
+import net.penguin.feature_discover.R
 import net.penguin.feature_discover.model.PlaylistScreenState
 
 @Composable
@@ -64,36 +69,118 @@ fun PlaylistScreenContent(
     state: PlaylistScreenState,
     onAction: (PlaylistScreenAction) -> Unit
 ) {
-    Box(modifier = modifier) {
-        CenterAlignedTopAppBar(
-            title = {},
-            navigationIcon = {
-                IconButton(
-                    modifier = Modifier.background(shape = CircleShape, color = Color.Gray),
-                    onClick = { onAction(PlaylistScreenAction.OnBackClicked) }
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Go back",
-                        tint = Color.White
+    Column(modifier) {
+        PageHeader(
+            state = state,
+            onAction = onAction
+        )
+        Column(
+            modifier = Modifier
+                .widthIn(max = ContentMaxWidth)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (state) {
+                is PlaylistScreenState.Error -> Text(
+                    modifier = Modifier.fillMaxSize(),
+                    text = stringResource(state.messageRes),
+                    textAlign = TextAlign.Center
+                )
+
+                PlaylistScreenState.Loading -> CircularProgressIndicator()
+                is PlaylistScreenState.Content -> {
+                    PlaylistContent(
+                        modifier = Modifier.fillMaxSize(),
+                        playlist = state.playlist
                     )
                 }
-            },
-        )
+            }
+        }
+    }
+}
 
+@Composable
+private fun PageHeader(
+    modifier: Modifier = Modifier,
+    state: PlaylistScreenState,
+    onAction: (PlaylistScreenAction) -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(dimensionResource(R.dimen.playlist_detail_header_height))
+            .fillMaxWidth()
+    ) {
         when (state) {
-            is PlaylistScreenState.Error -> Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = stringResource(state.messageRes),
-                textAlign = TextAlign.Center
-            )
-            PlaylistScreenState.Loading -> CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            is PlaylistScreenState.Error,
+            PlaylistScreenState.Loading -> {
+                CenterAlignedTopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        IconButton(onClick = { onAction(PlaylistScreenAction.OnBackClicked) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Go back",
+                            )
+                        }
+                    },
+                )
+            }
+
             is PlaylistScreenState.Content -> {
-                PlaylistContent(
-                    playlist = state.playlist,
-                    onAction = onAction
+                AsyncImage(
+                    modifier = Modifier.fillMaxSize(),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(state.playlist.picture)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = state.playlist.name,
+                    contentScale = ContentScale.Crop,
+                    alpha = .5f
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black,
+                                )
+                            )
+                        )
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = PaddingDefault, vertical = PaddingSmall)
+                        .align(Alignment.BottomCenter),
+                    text = state.playlist.name,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.headlineLarge,
+                    textAlign = TextAlign.Center
+                )
+                CenterAlignedTopAppBar(
+                    modifier = Modifier.align(Alignment.TopStart),
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors().copy(
+                        containerColor = Color.Transparent
+                    ),
+                    title = {},
+                    navigationIcon = {
+                        IconButton(
+                            modifier = Modifier.background(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.secondaryContainer
+                            ),
+                            onClick = { onAction(PlaylistScreenAction.OnBackClicked) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Go back",
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                    },
                 )
             }
         }
@@ -104,7 +191,6 @@ fun PlaylistScreenContent(
 private fun PlaylistContent(
     modifier: Modifier = Modifier,
     playlist: PlaylistDetail,
-    onAction: (PlaylistScreenAction) -> Unit
 ) {
     var songPlayingUrl: String? by rememberSaveable { mutableStateOf(null) }
     val context = LocalContext.current
@@ -114,81 +200,38 @@ private fun PlaylistContent(
             exoPlayer.release()
         }
     }
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(PaddingDefault)
+    ) {
+        items(playlist.songList) {
+            val isCurrentlyPlaying = songPlayingUrl == it.previewUrl
 
-    Column(modifier) {
-        Box(
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth()
-        ) {
-            AsyncImage(
-                modifier = Modifier.fillMaxSize(),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(playlist.picture)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = playlist.name,
-                contentScale = ContentScale.Crop,
-                alpha = .5f
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Black,
-                            )
-                        )
-                    )
-            )
-            Text(
+            SongItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = PaddingDefault, vertical = PaddingSmall)
-                    .align(Alignment.BottomCenter),
-                text = playlist.name,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineLarge,
-                textAlign = TextAlign.Center
+                    .padding(vertical = PaddingSmall)
+                    .border(
+                        width = 1.dp,
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(CornerRadiusDefault)
+                    )
+                    .height(dimensionResource(R.dimen.sound_track_height))
+                    .clickable {
+                        if (isCurrentlyPlaying) {
+                            exoPlayer.pause()
+                            songPlayingUrl = null
+                        } else {
+                            exoPlayer.setMediaItem(MediaItem.fromUri(it.previewUrl))
+                            exoPlayer.prepare()
+                            exoPlayer.play()
+                            songPlayingUrl = it.previewUrl
+                        }
+                    },
+                song = it,
+                isPlaying = isCurrentlyPlaying
             )
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(PaddingDefault)
-        ) {
-            items(playlist.songList) {
-                val isCurrentlyPlaying = songPlayingUrl == it.previewUrl
-
-                SongItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = PaddingSmall)
-                        .border(
-                            width = 1.dp,
-                            color = Color.LightGray,
-                            shape = RoundedCornerShape(CornerRadiusDefault)
-                        )
-                        .height(100.dp)
-                        .clickable {
-                            if (isCurrentlyPlaying) {
-                                exoPlayer.pause()
-                                songPlayingUrl = null
-                            } else {
-                                exoPlayer.setMediaItem(MediaItem.fromUri(it.previewUrl))
-                                exoPlayer.prepare()
-                                exoPlayer.play()
-                                songPlayingUrl = it.previewUrl
-                            }
-                        },
-                    song = it,
-                    isPlaying = isCurrentlyPlaying
-                )
-            }
         }
     }
 }
