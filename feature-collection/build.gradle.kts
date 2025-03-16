@@ -1,13 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.serialization)
-    alias(libs.plugins.androidx.room)
 }
 
 android {
-    namespace = "net.penguin.data"
+    namespace = "net.penguin.feature_collection"
     compileSdk = 35
 
     defaultConfig {
@@ -33,26 +32,27 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    room {
-        schemaDirectory("$projectDir/schemas")
+    buildFeatures {
+        compose = true
     }
 }
 
 dependencies {
+    implementation(project(":common-ui"))
+    implementation(project(":component-playlist"))
     implementation(project(":domain"))
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.squareup.logging.interceptor)
-
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    debugImplementation(libs.androidx.ui.tooling)
 
     implementation(libs.google.dagger.hilt)
     ksp(libs.google.dagger.hilt.compiler)
-
-    implementation(libs.timber)
-
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.hilt.navigation.compose)
 }

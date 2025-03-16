@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -21,6 +20,7 @@ import net.penguin.common_design.navigation.BottomNavBarNavigation
 import net.penguin.common_design.navigation.PlaylistDetailNavigation
 import net.penguin.common_design.theme.MoodInTunesTheme
 import net.penguin.component_playlist.ui.PlaylistScreen
+import net.penguin.feature_collection.CollectionScreen
 import net.penguin.feature_discover.ui.DiscoverScreen
 import net.penguin.moodintunes.ui.MoodInTunesNavBar
 
@@ -61,10 +61,15 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<BottomNavBarNavigation.Collection> {
-                          BackHandler {
-                              finish()
-                          }
-                            Text(modifier = Modifier.padding(innerPadding), text = "hello")
+                            BackHandler {
+                                finish()
+                            }
+                            CollectionScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                goToPlaylistDetails = {
+                                    navController.navigate(route = PlaylistDetailNavigation(it))
+                                }
+                            )
                         }
                         composable<PlaylistDetailNavigation> {
                             PlaylistScreen(

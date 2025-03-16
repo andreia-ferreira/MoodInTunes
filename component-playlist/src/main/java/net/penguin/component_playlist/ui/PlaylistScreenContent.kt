@@ -20,7 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -181,6 +183,35 @@ private fun PageHeader(
                             )
                         }
                     },
+                    actions = {
+                        if (state.playlist.isSaved) {
+                            IconButton(
+                                modifier = Modifier.background(
+                                    shape = CircleShape,
+                                    color = MaterialTheme.colorScheme.secondaryContainer
+                                ),
+                                onClick = { onAction(PlaylistScreenAction.OnRemoveSavedClicked) },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Favorite,
+                                    contentDescription = "Remove from collection",
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                modifier = Modifier.background(
+                                    shape = CircleShape,
+                                    color = MaterialTheme.colorScheme.secondaryContainer
+                                ),
+                                onClick = { onAction(PlaylistScreenAction.OnSaveClicked) }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.FavoriteBorder,
+                                    contentDescription = "Save to collection",
+                                )
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -276,6 +307,7 @@ private fun PlaylistScreenContentPreview() {
                 PlaylistDetail(
                     id = 666,
                     name = "Playlist of the Beast",
+                    isSaved = false,
                     description = ">:)",
                     trackNumber = 666,
                     duration = 666,

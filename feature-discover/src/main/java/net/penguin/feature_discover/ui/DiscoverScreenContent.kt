@@ -6,14 +6,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,11 +18,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -37,22 +31,16 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import net.penguin.common_design.DevicePreviews
 import net.penguin.common_design.theme.ContentMaxWidth
-import net.penguin.common_design.theme.CornerRadiusDefault
 import net.penguin.common_design.theme.MoodInTunesTheme
 import net.penguin.common_design.theme.PaddingBig
 import net.penguin.common_design.theme.PaddingDefault
 import net.penguin.common_design.theme.PaddingSmall
+import net.penguin.component_playlist.ui.PlaylistCard
 import net.penguin.domain.entity.Mood
 import net.penguin.domain.entity.Playlist
 import net.penguin.feature_discover.R
@@ -218,50 +206,10 @@ private fun SearchContent(
                         PlaylistCard(
                             modifier = Modifier.padding(vertical = PaddingSmall),
                             playlist = playlist,
-                            onAction = onAction
+                            onClick = { onAction(DiscoverScreenAction.OnSearchResultClicked(playlist))}
                         )
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PlaylistCard(
-    modifier: Modifier = Modifier,
-    playlist: Playlist,
-    onAction: (DiscoverScreenAction) -> Unit
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable {
-                onAction(DiscoverScreenAction.OnSearchResultClicked(playlist))
-            }
-    ) {
-        Row(Modifier) {
-            AsyncImage(
-                modifier = Modifier
-                    .padding(PaddingDefault)
-                    .size(dimensionResource(R.dimen.playlist_image_size))
-                    .clip(RoundedCornerShape(CornerSize(CornerRadiusDefault))),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(playlist.thumbnail)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = playlist.name,
-                contentScale = ContentScale.Crop,
-            )
-
-            Column(modifier = Modifier.padding(PaddingDefault)) {
-                Text(text = playlist.name)
-                Text(
-                    text = stringResource(
-                        R.string.playlist_number_of_tracks,
-                        playlist.trackNumber
-                    )
-                )
             }
         }
     }

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="sound_track_height">100dp</dimen>
     <dimen name="playlist_detail_header_height">200dp</dimen>
+    <dimen name="playlist_image_size">100dp</dimen>
 </resources>

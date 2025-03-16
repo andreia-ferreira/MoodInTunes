@@ -1,7 +1,6 @@
-package net.penguin.data.local
+package net.penguin.data.model
 
 import kotlinx.serialization.Serializable
-import net.penguin.data.model.PlaylistJson
 
 @Serializable
 data class CachedSearchData(

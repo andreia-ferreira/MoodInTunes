@@ -44,6 +44,7 @@ android {
 
 dependencies {
     implementation(project(":feature-discover"))
+    implementation(project(":component-playlist"))
     implementation(project(":common-ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
@@ -56,7 +57,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(project(":component-playlist"))
+    implementation(project(":feature-collection"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

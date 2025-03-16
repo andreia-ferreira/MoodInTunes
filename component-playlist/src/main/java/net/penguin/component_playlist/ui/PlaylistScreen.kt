@@ -21,6 +21,8 @@ fun PlaylistScreen(
         onAction = {
             when (it) {
                 PlaylistScreenAction.OnBackClicked -> onBackClicked()
+                is PlaylistScreenAction.OnSaveClicked -> viewModel.saveToCollection()
+                is PlaylistScreenAction.OnRemoveSavedClicked -> viewModel.removeFromCollection()
             }
         }
     )
@@ -28,4 +30,6 @@ fun PlaylistScreen(
 
 sealed interface PlaylistScreenAction {
     data object OnBackClicked: PlaylistScreenAction
+    data object OnSaveClicked: PlaylistScreenAction
+    data object OnRemoveSavedClicked: PlaylistScreenAction
 }

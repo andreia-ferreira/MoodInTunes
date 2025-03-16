@@ -1,4 +1,4 @@
-package net.penguin.data.local
+package net.penguin.data.local.cache
 
 abstract class KeyValueMemoryDataSource<K, V> {
     private var data: MutableMap<K, V> = mutableMapOf()

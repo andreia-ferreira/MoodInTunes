@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="discover_header">Hi there! How are you feeling today?</string>
-    <string name="playlist_number_of_tracks">%d tracks</string>
     <string name="mood_chill">Chill</string>
     <string name="mood_happy">Happy</string>
     <string name="mood_party">Party</string>

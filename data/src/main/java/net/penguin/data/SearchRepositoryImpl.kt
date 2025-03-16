@@ -2,10 +2,10 @@ package net.penguin.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import net.penguin.data.local.CachedSearchData
-import net.penguin.data.local.SearchMemoryDataSource
+import net.penguin.data.local.cache.SearchMemoryDataSource
 import net.penguin.data.mapper.PlaylistDetailMapper
 import net.penguin.data.mapper.PlaylistMapper
+import net.penguin.data.model.CachedSearchData
 import net.penguin.data.remote.DeezerApiService
 import net.penguin.domain.entity.Playlist
 import net.penguin.domain.entity.PlaylistDetail
@@ -32,7 +32,9 @@ class SearchRepositoryImpl @Inject constructor(
                     newCachedList.addAll(remoteData.body()?.data.orEmpty())
                     localDataSource.set(query, CachedSearchData(currentIndex, newCachedList))
                 }
-                emit(Result.success(PlaylistMapper.map(localDataSource.get(query)?.results.orEmpty())))
+
+                val mappedData = localDataSource.get(query)?.results.orEmpty().map { PlaylistMapper.map(it) }
+                emit(Result.success(mappedData))
             } catch (e: Exception) {
                 Timber.e(e)
                 emit(Result.failure(e))
