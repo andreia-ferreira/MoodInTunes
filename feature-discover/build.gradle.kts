@@ -40,7 +40,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":common-design"))
+    implementation(project(":common-ui"))
+    implementation(project(":component-playlist"))
     implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
@@ -67,7 +68,4 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.ui)
 }

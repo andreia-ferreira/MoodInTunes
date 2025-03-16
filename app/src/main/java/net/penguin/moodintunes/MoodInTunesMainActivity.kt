@@ -1,15 +1,13 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package net.penguin.moodintunes
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -19,11 +17,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import net.penguin.common_design.navigation.BottomNavBarNavigation
+import net.penguin.common_design.navigation.PlaylistDetailNavigation
 import net.penguin.common_design.theme.MoodInTunesTheme
-import net.penguin.feature_discover.navigation.DiscoverNavigationItem
+import net.penguin.component_playlist.ui.PlaylistScreen
 import net.penguin.feature_discover.ui.DiscoverScreen
-import net.penguin.feature_discover.ui.PlaylistScreen
-import net.penguin.moodintunes.navigation.MainNavigationItem
 import net.penguin.moodintunes.ui.MoodInTunesNavBar
 
 @AndroidEntryPoint
@@ -52,20 +50,23 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = MainNavigationItem.Discover
+                        startDestination = BottomNavBarNavigation.Discover
                     ) {
-                        composable<MainNavigationItem.Discover> {
+                        composable<BottomNavBarNavigation.Discover> {
                             DiscoverScreen(
                                 modifier = Modifier.padding(innerPadding),
                                 goToPlaylistDetails = {
-                                    navController.navigate(route = DiscoverNavigationItem.PlaylistDetail(it))
+                                    navController.navigate(route = PlaylistDetailNavigation(it))
                                 }
                             )
                         }
-                        composable<MainNavigationItem.Collection> {
+                        composable<BottomNavBarNavigation.Collection> {
+                          BackHandler {
+                              finish()
+                          }
                             Text(modifier = Modifier.padding(innerPadding), text = "hello")
                         }
-                        composable<DiscoverNavigationItem.PlaylistDetail> {
+                        composable<PlaylistDetailNavigation> {
                             PlaylistScreen(
                                 onBackClicked = {
                                     navController.popBackStack()

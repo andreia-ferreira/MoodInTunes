@@ -1,4 +1,4 @@
-package net.penguin.feature_discover.model
+package net.penguin.component_playlist.model
 
 import androidx.annotation.StringRes
 import net.penguin.domain.entity.PlaylistDetail

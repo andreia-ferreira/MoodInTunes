@@ -1,6 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
-package net.penguin.feature_discover.ui
+package net.penguin.component_playlist.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -58,10 +58,10 @@ import net.penguin.common_design.theme.CornerRadiusDefault
 import net.penguin.common_design.theme.MoodInTunesTheme
 import net.penguin.common_design.theme.PaddingDefault
 import net.penguin.common_design.theme.PaddingSmall
+import net.penguin.component_playlist.R
+import net.penguin.component_playlist.model.PlaylistScreenState
 import net.penguin.domain.entity.PlaylistDetail
 import net.penguin.domain.entity.Song
-import net.penguin.feature_discover.R
-import net.penguin.feature_discover.model.PlaylistScreenState
 
 @Composable
 fun PlaylistScreenContent(

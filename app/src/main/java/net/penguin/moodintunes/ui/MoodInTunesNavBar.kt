@@ -10,18 +10,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import net.penguin.common_design.navigation.BottomNavBarNavigation
 import net.penguin.moodintunes.R
-import net.penguin.moodintunes.navigation.MainNavigationItem
 
 @Composable
 fun MoodInTunesNavBar(
     modifier: Modifier = Modifier,
-    selectedItem: MainNavigationItem,
-    onItemSelected: (MainNavigationItem) -> Unit
+    selectedItem: BottomNavBarNavigation,
+    onItemSelected: (BottomNavBarNavigation) -> Unit
 ) {
     NavigationBar(modifier) {
         NavigationBarItem(
-            selected = selectedItem == MainNavigationItem.Discover,
+            selected = selectedItem == BottomNavBarNavigation.Discover,
             icon = {
                 Icon(
                     imageVector = Icons.Filled.Search,
@@ -31,10 +31,10 @@ fun MoodInTunesNavBar(
             label = {
                 Text(text = stringResource(R.string.navigation_discover))
             },
-            onClick = { onItemSelected(MainNavigationItem.Discover) }
+            onClick = { onItemSelected(BottomNavBarNavigation.Discover) }
         )
         NavigationBarItem(
-            selected = selectedItem == MainNavigationItem.Collection,
+            selected = selectedItem == BottomNavBarNavigation.Collection,
             icon = {
                 Icon(
                     imageVector = Icons.Filled.Menu,
@@ -44,7 +44,7 @@ fun MoodInTunesNavBar(
             label = {
                 Text(text = stringResource(R.string.navigation_collection))
             },
-            onClick = { onItemSelected(MainNavigationItem.Collection) }
+            onClick = { onItemSelected(BottomNavBarNavigation.Collection) }
         )
     }
 }

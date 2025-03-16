@@ -2,7 +2,7 @@ package net.penguin.common_design.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.dimensionResource
-import net.penguin.common_design.R
+import net.penguin.common_ui.R
 
 val PaddingSmall @Composable get() = dimensionResource(id = R.dimen.padding_small)
 val PaddingDefault @Composable get() = dimensionResource(id = R.dimen.padding_default)

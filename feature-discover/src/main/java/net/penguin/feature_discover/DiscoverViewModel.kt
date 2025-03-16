@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import net.penguin.common_ui.R
 import net.penguin.domain.entity.Mood
 import net.penguin.domain.usecase.SearchByMoodUseCase
 import net.penguin.feature_discover.mapper.MoodMapper
@@ -57,7 +58,7 @@ class DiscoverViewModel @Inject constructor(
                         searchState = if (result.isSuccess) {
                             DiscoverScreenState.SearchState.Success(result.getOrDefault(emptyList()))
                         } else {
-                            DiscoverScreenState.SearchState.Error(R.string.discover_generic_error)
+                            DiscoverScreenState.SearchState.Error(R.string.generic_error)
                         }
                     )
                 }
