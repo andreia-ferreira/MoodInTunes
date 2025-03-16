@@ -2,6 +2,7 @@
 
 package net.penguin.feature_discover.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -105,6 +106,12 @@ private fun MoodSelection(
     screenState: DiscoverScreenState,
     onAction: (DiscoverScreenAction) -> Unit
 ) {
+    if (screenState.moodList.size == 1) {
+        BackHandler {
+            onAction(DiscoverScreenAction.OnMoodUnselected)
+        }
+    }
+
     LazyVerticalGrid(
         modifier = modifier,
         columns = if (screenState.moodList.size == 1) {
