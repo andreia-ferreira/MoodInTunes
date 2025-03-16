@@ -2,37 +2,24 @@
 
 package net.penguin.feature_discover.ui
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,10 +31,9 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -99,6 +85,7 @@ fun DiscoverScreenContent(
             SearchContent(
                 modifier = Modifier.padding(PaddingDefault),
                 searchState = screenState.searchState,
+                currentQuery = screenState.selectedMood?.let { stringResource(it.titleRes) },
                 onAction = onAction
             )
             if (screenState.isLoading) {
@@ -133,7 +120,8 @@ private fun MoodSelection(
             MoodItem(
                 modifier = Modifier
                     .padding(PaddingSmall)
-                    .animateItem(fadeInSpec = tween(durationMillis = 250),
+                    .animateItem(
+                        fadeInSpec = tween(durationMillis = 250),
                         fadeOutSpec = tween(durationMillis = 100),
                         placementSpec = spring(stiffness = Spring.StiffnessMediumLow, dampingRatio = Spring.DampingRatioLowBouncy)
                     ),
@@ -186,25 +174,45 @@ private fun MoodItem(
 @Composable
 private fun SearchContent(
     modifier: Modifier = Modifier,
+    currentQuery: String? = null,
     searchState: DiscoverScreenState.SearchState,
     onAction: (DiscoverScreenAction) -> Unit
 ) {
     Column(modifier) {
-        Crossfade(searchState) {
-            when (it) {
-                is DiscoverScreenState.SearchState.Error -> Text(
-                    text = stringResource(it.messageRes)
-                )
-                DiscoverScreenState.SearchState.Idle -> {}
-                is DiscoverScreenState.SearchState.Success -> {
-                    LazyColumn {
-                        items(it.searchResults) { playlist ->
-                            PlaylistCard(
-                                modifier = Modifier.padding(vertical = PaddingSmall),
-                                playlist = playlist,
-                                onAction = onAction
-                            )
+        when (searchState) {
+            is DiscoverScreenState.SearchState.Error -> Text(
+                text = stringResource(searchState.messageRes)
+            )
+            DiscoverScreenState.SearchState.Idle -> {}
+            is DiscoverScreenState.SearchState.Success -> {
+                val listState = rememberLazyListState()
+                val shouldLoadMore = remember {
+                    derivedStateOf {
+                        val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                        val totalItemsCount = listState.layoutInfo.totalItemsCount
+
+                        lastVisibleItemIndex != null && lastVisibleItemIndex == totalItemsCount - 1
+                    }
+                }
+
+                LaunchedEffect(shouldLoadMore.value) {
+                    if (shouldLoadMore.value) {
+                        currentQuery?.let {
+                            onAction(DiscoverScreenAction.OnEndOfListReached(it, listState.layoutInfo.totalItemsCount))
                         }
+                    }
+                }
+
+                LazyColumn(state = listState) {
+                    items(
+                        items = searchState.searchResults,
+                        key = { it.id }
+                    ) { playlist ->
+                        PlaylistCard(
+                            modifier = Modifier.padding(vertical = PaddingSmall),
+                            playlist = playlist,
+                            onAction = onAction
+                        )
                     }
                 }
             }

@@ -1,11 +1,11 @@
 package net.penguin.data.mapper
 
-import net.penguin.data.model.PlaylistSearchResult
+import net.penguin.data.model.PlaylistJson
 import net.penguin.domain.entity.Playlist
 
 object PlaylistMapper {
-    fun map(data: PlaylistSearchResult): List<Playlist> {
-        return data.data.map {
+    fun map(data: List<PlaylistJson>): List<Playlist> {
+        return data.map {
             Playlist(
                 id = it.id,
                 name = it.title,

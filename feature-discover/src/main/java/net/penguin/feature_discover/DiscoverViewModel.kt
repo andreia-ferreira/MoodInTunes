@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val searchByMoodUseCase: SearchByMoodUseCase
+    private val searchByMoodUseCase: SearchByMoodUseCase,
 ): ViewModel() {
     private val fullMoodList = Mood.entries.map { MoodMapper.map(it) }
     private val _discoverScreenState: MutableStateFlow<DiscoverScreenState> = MutableStateFlow(
@@ -43,20 +43,22 @@ class DiscoverViewModel @Inject constructor(
         )
     }
 
-    private fun searchByMood(query: String) {
+    fun onEndOfListReached(currentQuery: String, currentIndex: Int) {
+        searchByMood(currentQuery, currentIndex)
+    }
+
+    private fun searchByMood(query: String, currentIndex: Int = 0) {
         _discoverScreenState.value = _discoverScreenState.value.copy(isLoading = true)
         viewModelScope.launch {
-            searchByMoodUseCase.execute(SearchByMoodUseCase.RequestParams(query))
-                .onSuccess {
+            searchByMoodUseCase.execute(SearchByMoodUseCase.RequestParams(query, currentIndex))
+                .collect { result ->
                     _discoverScreenState.value = _discoverScreenState.value.copy(
                         isLoading = false,
-                        searchState = DiscoverScreenState.SearchState.Success(it)
-                    )
-                }
-                .onFailure {
-                    _discoverScreenState.value = _discoverScreenState.value.copy(
-                        isLoading = false,
-                        searchState = DiscoverScreenState.SearchState.Error(R.string.discover_generic_error)
+                        searchState = if (result.isSuccess) {
+                            DiscoverScreenState.SearchState.Success(result.getOrDefault(emptyList()))
+                        } else {
+                            DiscoverScreenState.SearchState.Error(R.string.discover_generic_error)
+                        }
                     )
                 }
         }
