@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import net.penguin.domain.usecase.GetPlaylistDetailUseCase
 import net.penguin.feature_discover.model.PlaylistScreenState
-import net.penguin.feature_discover.navigation.NavigationItem
+import net.penguin.feature_discover.navigation.DiscoverNavigationItem
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +23,7 @@ class PlaylistViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val playlistDetail = savedStateHandle.toRoute<NavigationItem.PlaylistDetail>()
+            val playlistDetail = savedStateHandle.toRoute<DiscoverNavigationItem.PlaylistDetail>()
             getPlaylistDetailUseCase.execute(GetPlaylistDetailUseCase.RequestParams(playlistDetail.playlistId))
                 .onSuccess {
                     _playlistScreenState.value = PlaylistScreenState.Content(it)
