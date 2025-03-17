@@ -36,6 +36,6 @@ class CollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removePlaylist(id: Long) {
-        database.playlistDao().deleteSongsByPlaylist(id)
+        database.playlistDao().deletePlaylist(id)
     }
 }
