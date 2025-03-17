@@ -21,10 +21,11 @@ class CollectionRepositoryImpl @Inject constructor(
         val data = database.playlistDao().getAllPlaylistsWithSongs()
         return data.map {
             Playlist(
-                it.playlist.id,
-                it.playlist.title,
-                it.playlist.trackNumber,
-                it.playlist.pictureUrl
+                id = it.playlist.id,
+                name = it.playlist.title,
+                trackNumber = it.playlist.trackNumber,
+                thumbnail = it.playlist.pictureUrl,
+                isSaved = true
             )
         }
     }

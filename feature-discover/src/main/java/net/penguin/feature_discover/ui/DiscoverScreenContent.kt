@@ -231,7 +231,8 @@ private fun DiscoverScreenContentPreview() {
                             id = 1L,
                             name = "Mood playlist",
                             trackNumber = 666,
-                            thumbnail = ""
+                            thumbnail = "",
+                            isSaved = false
                         )
                     )
                 )

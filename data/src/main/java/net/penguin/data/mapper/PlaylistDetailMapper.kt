@@ -7,10 +7,10 @@ import net.penguin.domain.entity.PlaylistDetail
 import net.penguin.domain.entity.Song
 
 object PlaylistDetailMapper {
-    fun map(source: PlaylistDetailResult): PlaylistDetail {
+    fun map(source: PlaylistDetailResult, isSaved: Boolean): PlaylistDetail {
         return PlaylistDetail(
             id = source.id,
-            isSaved = false,
+            isSaved = isSaved,
             name = source.title,
             description = source.description,
             trackNumber = source.nbTracks,
