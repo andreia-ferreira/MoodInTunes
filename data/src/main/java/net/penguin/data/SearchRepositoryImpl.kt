@@ -1,6 +1,7 @@
 package net.penguin.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import net.penguin.data.local.cache.SearchMemoryDataSource
 import net.penguin.data.local.database.MoodInTunesDatabase
@@ -70,7 +71,7 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     private suspend fun isPlaylistInCollection(id: Long): Boolean {
-        val savedPlaylistIds = database.playlistDao().getAllPlaylistsWithSongs().map { it.playlist.id }
+        val savedPlaylistIds = database.playlistDao().getAllPlaylistsWithSongs().first().map { it.playlist.id }
         return id in savedPlaylistIds
     }
 

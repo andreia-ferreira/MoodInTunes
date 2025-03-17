@@ -1,5 +1,7 @@
 package net.penguin.data
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.penguin.data.local.database.MoodInTunesDatabase
 import net.penguin.data.mapper.PlaylistDetailMapper
 import net.penguin.data.mapper.SongMapper
@@ -17,16 +19,17 @@ class CollectionRepositoryImpl @Inject constructor(
         database.playlistDao().insertPlaylistWithSongs(playlistData, songData)
     }
 
-    override suspend fun getSavedPlaylists(): List<Playlist> {
-        val data = database.playlistDao().getAllPlaylistsWithSongs()
-        return data.map {
-            Playlist(
-                id = it.playlist.id,
-                name = it.playlist.title,
-                trackNumber = it.playlist.trackNumber,
-                thumbnail = it.playlist.pictureUrl,
-                isSaved = true
-            )
+    override fun getSavedPlaylists(): Flow<List<Playlist>> {
+        return database.playlistDao().getAllPlaylistsWithSongs().map { playlistWithSongs ->
+            playlistWithSongs.map {
+                Playlist(
+                    id = it.playlist.id,
+                    name = it.playlist.title,
+                    trackNumber = it.playlist.trackNumber,
+                    thumbnail = it.playlist.pictureUrl,
+                    isSaved = true
+                )
+            }
         }
     }
 

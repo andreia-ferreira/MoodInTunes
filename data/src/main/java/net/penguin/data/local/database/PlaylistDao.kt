@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import kotlinx.coroutines.flow.Flow
 import net.penguin.data.local.database.entity.PlaylistLocalData
 import net.penguin.data.local.database.entity.PlaylistWithSongs
 import net.penguin.data.local.database.entity.SongLocalData
@@ -13,7 +14,7 @@ import net.penguin.data.local.database.entity.SongLocalData
 interface PlaylistDao {
     @Transaction
     @Query("SELECT * FROM playlists")
-    suspend fun getAllPlaylistsWithSongs(): List<PlaylistWithSongs>
+    fun getAllPlaylistsWithSongs(): Flow<List<PlaylistWithSongs>>
 
     @Transaction
     @Query("SELECT * FROM playlists WHERE id = :playlistId")

@@ -7,4 +7,7 @@ sealed interface UseCase {
     interface ParamsUseCase<in T, out R>: UseCase {
         suspend fun execute(requestParams: T): R
     }
+    interface NoParamsFlowUseCase<out R>: UseCase {
+        fun execute(): R
+    }
 }
