@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import net.penguin.data.local.database.entity.PlaylistLocalData
 import net.penguin.data.local.database.entity.PlaylistWithSongs
@@ -31,6 +32,9 @@ interface PlaylistDao {
         insertPlaylist(playlist)
         insertSongs(songs)
     }
+
+    @Update
+    suspend fun updatePlaylist(playlist: PlaylistLocalData)
 
     @Query("DELETE FROM playlists WHERE id = :playlistId")
     suspend fun deletePlaylist(playlistId: Long)

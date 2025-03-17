@@ -75,12 +75,12 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     private suspend fun updateDatabase(remoteData: PlaylistSearchResult.Playlist) {
-        val updatedData = database.playlistDao().getPlaylistWithSongs(remoteData.id).playlist.copy(
+        val updatedPlaylistData = database.playlistDao().getPlaylistWithSongs(remoteData.id).playlist.copy(
             title = remoteData.title,
             pictureUrl = remoteData.pictureMedium,
             trackNumber = remoteData.nbTracks
         )
-        database.playlistDao().insertPlaylist(updatedData)
+        database.playlistDao().updatePlaylist(updatedPlaylistData)
     }
 
     private suspend fun isPlaylistInCollection(id: Long): Boolean {
