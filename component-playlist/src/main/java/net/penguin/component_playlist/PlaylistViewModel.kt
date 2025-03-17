@@ -29,7 +29,9 @@ class PlaylistViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val playlistDetail = savedStateHandle.toRoute<PlaylistDetailNavigation>()
-            getPlaylistDetailUseCase.execute(GetPlaylistDetailUseCase.RequestParams(playlistDetail.playlistId))
+            getPlaylistDetailUseCase.execute(GetPlaylistDetailUseCase.RequestParams(
+                playlistDetail.playlistId, playlistDetail.isSaved
+            ))
                 .onSuccess {
                     _playlistScreenState.value = PlaylistScreenState.Content(it)
                 }

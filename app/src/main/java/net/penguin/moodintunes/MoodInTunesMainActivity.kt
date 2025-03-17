@@ -55,8 +55,8 @@ class MainActivity : ComponentActivity() {
                         composable<BottomNavBarNavigation.Discover> {
                             DiscoverScreen(
                                 modifier = Modifier.padding(innerPadding),
-                                goToPlaylistDetails = {
-                                    navController.navigate(route = PlaylistDetailNavigation(it))
+                                goToPlaylistDetails = { id, isSaved ->
+                                    navController.navigate(route = PlaylistDetailNavigation(id, isSaved))
                                 }
                             )
                         }
@@ -66,8 +66,8 @@ class MainActivity : ComponentActivity() {
                             }
                             CollectionScreen(
                                 modifier = Modifier.padding(innerPadding),
-                                goToPlaylistDetails = {
-                                    navController.navigate(route = PlaylistDetailNavigation(it))
+                                goToPlaylistDetails = { id, isSaved ->
+                                    navController.navigate(route = PlaylistDetailNavigation(id, isSaved))
                                 }
                             )
                         }

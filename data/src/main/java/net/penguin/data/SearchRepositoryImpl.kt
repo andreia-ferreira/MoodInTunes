@@ -39,6 +39,17 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPlaylistDetails(playlistId: Long): Result<PlaylistDetail> {
+        return try {
+            val result = apiService.getPlaylistDetails(playlistId)
+            val isSaved = isPlaylistInCollection(playlistId)
+            Result.success(PlaylistDetailMapper.map(result.body()!!, isSaved))
+        } catch (e: Exception) {
+            Timber.e(e)
+            Result.failure(e)
+        }
+    }
+
     private suspend fun refreshData(query: String, currentIndex: Int, currentCache: CachedSearchData?) {
         try {
             val newCachedList = currentCache?.results.orEmpty().toMutableList()
@@ -48,14 +59,16 @@ class SearchRepositoryImpl @Inject constructor(
                 index = currentIndex
             )
 
-            remoteData.body()?.data?.forEach { playlist ->
-                val isSaved = isPlaylistInCollection(playlist.id)
-                if (isSaved) {
-                    updateDatabase(playlist)
+            if (!remoteData.body()?.data.isNullOrEmpty()) {
+                remoteData.body()?.data?.forEach { playlist ->
+                    val isSaved = isPlaylistInCollection(playlist.id)
+                    if (isSaved) {
+                        updateDatabase(playlist)
+                    }
+                    newCachedList.add(CachedSearchData.Playlist(isSaved = isSaved, data = playlist))
                 }
-                newCachedList.add(CachedSearchData.Playlist(isSaved = isSaved, data = playlist))
+                searchCache.set(query, CachedSearchData(currentIndex, newCachedList))
             }
-            searchCache.set(query, CachedSearchData(currentIndex, newCachedList))
         } catch (e: Exception) {
             Timber.e(e)
         }
@@ -73,17 +86,6 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun isPlaylistInCollection(id: Long): Boolean {
         val savedPlaylistIds = database.playlistDao().getAllPlaylistsWithSongs().first().map { it.playlist.id }
         return id in savedPlaylistIds
-    }
-
-    override suspend fun getPlaylistDetails(playlistId: Long): Result<PlaylistDetail> {
-        return try {
-            val result = apiService.getPlaylistDetails(playlistId)
-            val isSaved = isPlaylistInCollection(playlistId)
-            Result.success(PlaylistDetailMapper.map(result.body()!!, isSaved))
-        } catch (e: Exception) {
-            Timber.e(e)
-            Result.failure(e)
-        }
     }
 
     companion object {

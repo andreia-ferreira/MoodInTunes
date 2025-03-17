@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import net.penguin.domain.repository.CollectionRepository
 import net.penguin.domain.repository.SearchRepository
 import net.penguin.domain.usecase.GetPlaylistDetailUseCase
 import net.penguin.domain.usecase.SearchByMoodUseCase
@@ -18,7 +19,7 @@ object UseCaseModule {
     }
 
     @Provides
-    fun provideGetPlaylistDetailUseCase(repository: SearchRepository): GetPlaylistDetailUseCase {
-        return GetPlaylistDetailUseCase(repository)
+    fun provideGetPlaylistDetailUseCase(searchRepository: SearchRepository, collectionRepository: CollectionRepository): GetPlaylistDetailUseCase {
+        return GetPlaylistDetailUseCase(searchRepository, collectionRepository)
     }
 }

@@ -33,9 +33,9 @@ class CollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPlaylistDetails(id: Long): PlaylistDetail {
+    override suspend fun getPlaylistDetails(id: Long): Result<PlaylistDetail> {
         val data = database.playlistDao().getPlaylistWithSongs(id)
-        return PlaylistDetailMapper.map(data)
+        return Result.success(PlaylistDetailMapper.map(data))
     }
 
     override suspend fun removePlaylist(id: Long) {

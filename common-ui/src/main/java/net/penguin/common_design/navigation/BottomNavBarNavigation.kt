@@ -11,4 +11,4 @@ sealed class BottomNavBarNavigation {
 }
 
 @Serializable
-data class PlaylistDetailNavigation(val playlistId: Long)
+data class PlaylistDetailNavigation(val playlistId: Long, val isSaved: Boolean)
