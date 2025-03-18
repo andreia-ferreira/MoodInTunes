@@ -18,4 +18,7 @@ dependencies {
     implementation(libs.google.dagger)
     ksp(libs.google.dagger.compiler)
     implementation(libs.kotlinx.coroutines.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent)
 }
