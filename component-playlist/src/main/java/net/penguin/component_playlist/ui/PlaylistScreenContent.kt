@@ -46,6 +46,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -89,7 +91,9 @@ fun PlaylistScreenContent(
                     textAlign = TextAlign.Center
                 )
 
-                PlaylistScreenState.Loading -> CircularProgressIndicator()
+                PlaylistScreenState.Loading -> CircularProgressIndicator(
+                    modifier = Modifier.semantics { contentDescription = "Loading" }
+                )
                 is PlaylistScreenState.Content -> {
                     PlaylistContent(
                         modifier = Modifier.fillMaxSize(),

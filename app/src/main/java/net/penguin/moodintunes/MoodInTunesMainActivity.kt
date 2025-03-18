@@ -25,7 +25,7 @@ import net.penguin.feature_discover.ui.DiscoverScreen
 import net.penguin.moodintunes.ui.MoodInTunesNavBar
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MoodInTunesMainActivity : ComponentActivity() {
     private val viewModel: MoodInTunesMainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
