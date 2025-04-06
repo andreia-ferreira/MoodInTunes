@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="discover_header">Hi there! How are you feeling today?</string>
+    <string name="discover_read_the_room_title">Read the room</string>
+    <string name="discover_read_the_room_description">Take a picture of your surroundings and we\'ll suggest you songs</string>
+    <string name="discover_read_the_room_button">Try it</string>
     <string name="mood_chill">Chill</string>
     <string name="mood_happy">Happy</string>
     <string name="mood_party">Party</string>
@@ -14,4 +17,7 @@
     <string name="mood_sad">Sad</string>
     <string name="mood_angry">Angry</string>
     <string name="mood_road_trip">Road trip</string>
+    <string name="error">Error</string>
+    <string name="ok">Ok</string>
+    <string name="camera_permission_not_granted">Please grant camera permissions to use this feature.</string>
 </resources>

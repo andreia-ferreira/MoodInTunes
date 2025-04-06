@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -36,47 +37,60 @@ class MoodInTunesMainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             MoodInTunesTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        MoodInTunesNavBar(
-                            selectedItem = selectedNavigationItem,
-                            onItemSelected = {
-                                viewModel.onNavBarItemChanged(it)
-                                navController.navigate(it)
-                            }
-                        )
-                    }
-                ) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = BottomNavBarNavigation.Discover
-                    ) {
-                        composable<BottomNavBarNavigation.Discover> {
-                            DiscoverScreen(
-                                modifier = Modifier.padding(innerPadding),
-                                goToPlaylistDetails = { id, isSaved ->
-                                    navController.navigate(route = PlaylistDetailNavigation(id, isSaved))
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = {
+                            MoodInTunesNavBar(
+                                selectedItem = selectedNavigationItem,
+                                onItemSelected = {
+                                    viewModel.onNavBarItemChanged(it)
+                                    navController.navigate(it)
                                 }
                             )
                         }
-                        composable<BottomNavBarNavigation.Collection> {
-                            BackHandler {
-                                finish()
+                    ) { innerPadding ->
+                        NavHost(
+                            navController = navController,
+                            startDestination = BottomNavBarNavigation.Discover
+                        ) {
+                            composable<BottomNavBarNavigation.Discover> {
+                                DiscoverScreen(
+                                    modifier = Modifier.padding(innerPadding),
+                                    goToPlaylistDetails = { id, isSaved ->
+                                        navController.navigate(
+                                            route = PlaylistDetailNavigation(
+                                                id,
+                                                isSaved
+                                            )
+                                        )
+                                    }
+                                )
+
                             }
-                            CollectionScreen(
-                                modifier = Modifier.padding(innerPadding),
-                                goToPlaylistDetails = { id, isSaved ->
-                                    navController.navigate(route = PlaylistDetailNavigation(id, isSaved))
+                            composable<BottomNavBarNavigation.Collection> {
+                                BackHandler {
+                                    finish()
                                 }
-                            )
-                        }
-                        composable<PlaylistDetailNavigation> {
-                            PlaylistScreen(
-                                onBackClicked = {
-                                    navController.popBackStack()
-                                }
-                            )
+                                CollectionScreen(
+                                    modifier = Modifier.padding(innerPadding),
+                                    goToPlaylistDetails = { id, isSaved ->
+                                        navController.navigate(
+                                            route = PlaylistDetailNavigation(
+                                                id,
+                                                isSaved
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+                            composable<PlaylistDetailNavigation> {
+                                PlaylistScreen(
+                                    onBackClicked = {
+                                        navController.popBackStack()
+                                    }
+                                )
+                            }
                         }
                     }
                 }

@@ -14,16 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -63,11 +67,13 @@ fun DiscoverScreenContent(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = PaddingDefault, vertical = PaddingBig),
-            text = stringResource(R.string.discover_header)
+            text = stringResource(R.string.discover_header),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
         )
 
         MoodSelection(
-            modifier = Modifier.padding(PaddingDefault),
+            modifier = Modifier.padding(horizontal = PaddingDefault),
             screenState = screenState,
             onAction = onAction
         )
@@ -133,6 +139,33 @@ private fun MoodSelection(
                     }
                 }
             )
+        }
+
+        if (screenState.moodList.size != 1) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Card(modifier = Modifier.padding(top = PaddingDefault, bottom = PaddingBig)) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = PaddingDefault, vertical = PaddingSmall),
+                        text = stringResource(R.string.discover_read_the_room_title),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        modifier = Modifier.padding(horizontal = PaddingDefault),
+                        text = stringResource(R.string.discover_read_the_room_description),
+                    )
+                    Button(
+                        modifier = Modifier
+                            .padding(horizontal = PaddingDefault, vertical = PaddingSmall)
+                            .align(Alignment.End),
+                        onClick = { onAction(DiscoverScreenAction.OnReadTheRoomClicked) }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.discover_read_the_room_button)
+                        )
+                    }
+                }
+            }
         }
     }
 }
